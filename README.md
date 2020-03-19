@@ -730,39 +730,6 @@ To disable network access, add `--net none` as an argument to `podman run`.
 Man page for `podman run`:
 https://github.com/containers/libpod/blob/master/docs/source/markdown/podman-run.1.md
 
-### How to record and use a SECCOMP profile
-    
-:warning: The software project [__oci-seccomp-bpf-hook__](https://github.com/containers/oci-seccomp-bpf-hook/) is brand new and is currently being developed. It's not available in the Fedora 31 package repository. Currently installing from source code is probably the best option if you are running Fedora 31.
-
-Install requirements
-```
-$ cat /etc/fedora-release 
-Fedora release 31 (Thirty One)
-$ sudo dnf install -y bcc bcc-devel conmon container-selinux containers-common crun golang kernel-core kernel-headers libseccomp podman runc autoconf automake bash-completion bats bridge-utils btrfs-progs-devel bzip2 containers-common device-mapper-devel emacs-nox file findutils fuse3 fuse3-devel gcc git glib2-devel glibc-static gnupg go-md2man gpgme-devel iproute iptables jq libassuan-devel libcap-devel libmsi1 libnet libnet-devel libnl3-devel libseccomp-devel libselinux-devel libtool libvarlink-util lsof make msitools nmap-ncat ostree ostree-devel pandoc procps-ng protobuf protobuf-c protobuf-c-devel protobuf-devel protobuf-python python python3-dateutil python3-psutil python3-pytoml selinux-policy-devel unzip vim which xz zip
-```
-(The package list was guessed from [this file](https://github.com/containers/oci-seccomp-bpf-hook/blob/master/contrib/cirrus/setup.sh))
-
-Build the software
-```
-$ cd
-$ git clone https://github.com/containers/oci-seccomp-bpf-hook.git
-$ cd oci-seccomp-bpf-hook
-$ make
-```
-
-
-There are advanced functionality being developed to 
-https://github.com/containers/oci-seccomp-bpf-hook
-
-https://github.com/containers/oci-seccomp-bpf-hook/blob/master/docs/oci-seccomp-bpf-hook.md
-
-Experimental
-
-sudo podman run --annotation io.containers.trace-syscall="if:[absolute path to the input file];of:[absolute path to the output file]" IMAGE COMMAND
-
---seccomp-policy=image 
-
-
 ## How to save disk space
 
 ### Easy tip: Use containers based on Alpine 
