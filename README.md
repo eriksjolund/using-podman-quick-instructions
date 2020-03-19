@@ -19,7 +19,7 @@ These instructions assume that
     + [Example: Ubuntu LTS](#example-ubuntu-lts--is-graphicsmagick-already-installed)
     + [Example: Alpine](#example-alpine--is-graphicsmagick-already-installed)
     + [Results of the tests](#results-of-the-tests-is-graphicsmagick-already-installed)
-  * [Is the software package available in a package repository?](#is-the-software-package-availabe-in-a-package-repository)
+  * [Is the software package available in a package repository?](#is-the-software-package-available-in-a-package-repository)
     + [Example: Fedora](#example-fedora--is-graphicsmagick-available-in-a-package-repository)
     + [Example: CentOS](#example-centos--is-graphicsmagick-available-in-a-package-repository)
     + [Example: Ubuntu LTS](#example-ubuntu-lts--is-graphicsmagick-available-in-a-package-repository)
