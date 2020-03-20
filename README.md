@@ -2,7 +2,7 @@
 
 These instructions assume that
 
-* you have some knowledge about basic Linux commands such as __ls__, __cat__, echo and __grep__
+* you have some knowledge about basic Linux commands such as __ls__, __cat__, __echo__ and __grep__
 * you have a Linux computer with __podman__ installed. ([Installation instructions](https://podman.io/getting-started/installation))
 
 #### Table of contents
