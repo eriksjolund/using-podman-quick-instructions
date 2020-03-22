@@ -707,7 +707,7 @@ than executing an untrusted executable directly
 
 The reason is that `podman run` provides extra encapsulation protection.
 
-* Write access to directories on the host system need to be granted explicitly with (`--volume_`, `-v`).
+* Write access to directories on the host system need to be granted explicitly with (`--volume`, `-v`).
 * add more items here ...
 
 ## How to run a command in a container image in a more secure and restricted way
@@ -788,7 +788,7 @@ The trick is to create the package metadata cache in advance and reuse it with a
 
 Let's assume we are building containers based on Fedora 31.
 
-First, create an empty directory, for instance _/home/me/f31cache.
+First, create an empty directory, for instance _/home/me/f31cache_.
 
 ```
 [me@linux ~]$ mkdir $HOME/f31cache
