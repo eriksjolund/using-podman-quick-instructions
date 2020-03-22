@@ -80,7 +80,7 @@ The last line of the text was printed to _stdout_  and originates from the comma
 If we run the same command again 
 
 ```
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 echo
+[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 echo Hello!
 Hello!
 [me@linux ~]$ 
 ```
