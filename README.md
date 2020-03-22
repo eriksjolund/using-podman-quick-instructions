@@ -252,7 +252,7 @@ Check the container image __docker.io/library/centos:8__
 Check the container image __docker.io/library/alpine:3__
 
 ```
-[me@linux ~]$ podman run docker.io/library/alpine:3 apk --no-cache list -a | grep -i graphicsmagick
+[me@linux ~]$ podman run --rm docker.io/library/alpine:3 apk --no-cache list -a | grep -i graphicsmagick
 [me@linux ~]$ 
 ```
 
@@ -305,7 +305,7 @@ Nothing there.
 Let's check the extra repository PowerTools
 
 ```
-[me@linux ~]$ podman run --rm -ti docker.io/library/centos:8 dnf repository-packages PowerTools list | grep -i graphicsmagick
+[me@linux ~]$ podman run --rm docker.io/library/centos:8 dnf repository-packages PowerTools list | grep -i graphicsmagick
 [me@linux ~]$ 
 ```
 Nothing there.
@@ -351,7 +351,7 @@ provides the same information)
 Check the container image  __docker.io/library/alpine:3__
 
 ```
-[me@linux ~]$ podman run docker.io/library/alpine:3 apk --no-cache list -a | grep -i graphicsmagick
+[me@linux ~]$ podman run --rm docker.io/library/alpine:3 apk --no-cache list -a | grep -i graphicsmagick
 graphicsmagick-zsh-completion-5.7.1-r0 x86_64 {zsh} (custom)
 graphicsmagick-1.3.33-r1 x86_64 {graphicsmagick} (MIT)
 graphicsmagick-dev-1.3.33-r1 x86_64 {graphicsmagick} (MIT)
