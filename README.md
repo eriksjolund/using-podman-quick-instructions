@@ -507,7 +507,7 @@ The container images ordered in size
 ## Use the installed software package (resize a photo with GraphicsMagick)
 
 Although the containers have been built with different commands and from different Linux distributions,
-the resulting container images will behave quite similar when they are used.
+the resulting container images will behave quite similarly when they are used.
 
 The following examples show how similar they are from a user perspective.
 
