@@ -42,6 +42,7 @@ These instructions assume that
   * [Consider the risc of malicious code in pre-built container images](#consider-the-risc-of-malicious-code-in-pre-built-container-images)
   * [How to run a command in a container image in a more secure and restricted way](#how-to-run-a-command-in-a-container-image-in-a-more-secure-and-restricted-way)
 - [How to save disk space](#how-to-save-disk-space)
+- [How to save time](#how-to-save-time)
 - [The professional way, using Dockerfile and Github/Gitlab](#the-professional-way-using-dockerfile-and-githubgitlab)
 
 ## Basic usage
@@ -771,6 +772,103 @@ To list the biggest container image
 
 ```
 
+## How to save time
+
+### Speed up _podman build_ by reusing the package metadata cache
+
+The first step of a container build is often to download metadata from
+the package repositories and post-process the data.
+
+This build step may take half a minute or so but luckily we can avoid it by reusing
+the result.
+
+The trick is to create the package metadata cache in advance and reuse it with an  _overlay mount_.
+
+#### Example Fedora : Speed up _podman build_ by reusing the DNF metadata cache
+
+Let's assume we are building containers based on Fedora 31.
+
+First, create an empty directory, for instance _/home/me/f31cache.
+
+```
+[me@linux ~]$ mkdir $HOME/f31cache
+[me@linux ~]$ 
+```
+
+Fill the directory with the most recent __dnf__ metadata cache for _Fedora 31_.
+
+```
+[me@linux ~]$ time podman run --rm -v $HOME/f31cache:/var/cache/dnf:Z registry.fedoraproject.org/fedora:31 dnf makecache
+Fedora Modular 31 - x86_64                      413 kB/s | 5.2 MB     00:12    
+Fedora Modular 31 - x86_64 - Updates            3.0 MB/s | 4.0 MB     00:01    
+Fedora 31 - x86_64 - Updates                     16 MB/s |  22 MB     00:01    
+Fedora 31 - x86_64                               30 MB/s |  71 MB     00:02    
+Last metadata expiration check: 0:00:01 ago on Sat Mar 21 18:50:20 2020.
+Metadata cache created.
+
+real	0m36.327s
+user	0m0.152s
+sys	0m0.076s
+[me@linux ~]$ 
+```
+
+The command took __36__ seconds to finish.
+
+```
+[me@linux ~]$ du -sh $HOME/f31cache
+212M	/home/me/f31cache
+```
+
+The directory consumes __212 MB__ of disk space.
+
+Let's rebuild the [previously built](#example-fedora--install-graphicsmagick-with-podman-build) container image __localhost/foobar:fedora31__, but
+now by reusing the DNF metadata cache from _/home/me/f31cache_.
+
+Copy-paste these lines into the terminal
+
+```
+echo "FROM docker.io/library/fedora:31
+RUN dnf -y update && dnf -y install epel-release && dnf -y install GraphicsMagick && dnf clean all
+" | time podman build -v $HOME/f31cache:/var/cache/dnf:O -t foobar:fedora31 -
+
+```
+
+The `podman build` command finishes succesfully. `time` prints
+
+```
+0.17user 0.06system 0:00.22elapsed 104%CPU (0avgtext+0avgdata 42212maxresident)k
+0inputs+3232outputs (0major+6383minor)pagefaults 0swaps
+```
+
+__0.22 seconds__! Less than one second! No, that is too fast to believe it's true.
+We need to add the flag `--no-cache` so that podman will actually rebuild the container image
+without reusing cached results.
+
+A second trial:
+
+Copy-paste these lines into the terminal
+
+```
+echo "FROM docker.io/library/fedora:31
+RUN dnf -y update && dnf -y install epel-release && dnf -y install GraphicsMagick && dnf clean all
+" | time podman build --no-cache -v $HOME/f31cache:/var/cache/dnf:O -t foobar:fedora31 -
+
+```
+
+The `podman build` command finishes succesfully. `time` prints
+
+```
+13.73user 3.20system 0:25.77elapsed 65%CPU (0avgtext+0avgdata 173404maxresident)k
+553208inputs+523056outputs (453major+320854minor)pagefaults 0swaps
+```
+
+About __26 seconds__!
+
+A normal build without `-v $HOME/f31y3:/var/cache/dnf:O` takes __52 seconds__.
+
+__Conclusion:__ Reusing the DNF metadata cache speeds things up.
+
+The blog post [_Speeding up container image builds with Buildah_](https://www.redhat.com/sysadmin/speeding-container-buildah) provides more details.
 
 ## Linux container images for the brave adventurous user not afraid of bugs
 
