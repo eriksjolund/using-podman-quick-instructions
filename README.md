@@ -43,6 +43,7 @@ These instructions assume that
   * [How to run a command in a container image in a more secure and restricted way](#how-to-run-a-command-in-a-container-image-in-a-more-secure-and-restricted-way)
 - [How to save disk space](#how-to-save-disk-space)
 - [How to save time](#how-to-save-time)
+- [When to use the flags _-i_ (_--interactive_) and _-t_ (_--tty_)](#when-to-use-the-flags--i---interactive-and--t---tty)
 - [The professional way, using Dockerfile and Github/Gitlab](#the-professional-way-using-dockerfile-and-githubgitlab)
 
 ## Basic usage
@@ -58,7 +59,7 @@ podman version 1.8.0
 Run the command `echo Hello!` in the container __docker.io/library/ubuntu:18.04__
 
 ```
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 echo Hello!
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 echo Hello!
 Trying to pull docker.io/library/ubuntu:18.04...
 Getting image source signatures
 Copying blob de83a2304fa1 done  
@@ -80,7 +81,7 @@ The last line of the text was printed to _stdout_  and originates from the comma
 If we run the same command again 
 
 ```
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 echo Hello!
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 echo Hello!
 Hello!
 [me@linux ~]$ 
 ```
@@ -97,6 +98,7 @@ docker.io/library/ubuntu    18.04         72300a873c2c   4 days ago     66.6 MB
 
 but container images can be much smaller than that. For instance the popular container image 
 __docker.io/library/alpine:latest__ is about 6 MB. 
+
 
 ## The difference between the host system and the container
 
@@ -877,6 +879,42 @@ The blog post [_Speeding up container image builds with Buildah_](https://www.re
 | registry.fedoraproject.org/fedora:rawhide | 207  | The latest development of Fedora (not yet released). :warning: Expect more bugs. |
 | docker.io/library/alpine:edge | 6  | The latest development of Alpine (not yet released). :warning: Expect more bugs. |
 | docker.io/library/debian:unstable | 123 | The latest development of Debian (not yet released). :warning: Expect more bugs. |
+
+## When to use the flags _-i_ (_--interactive_) and _-t_ (_--tty_)
+
+If your program reads from _stdin_, use the command line flag `-i`
+
+```
+[me@linux ~]$ echo Just one line | podman run --rm -i docker.io/library/ubuntu:18.04 wc -l
+1
+[me@linux ~]$ 
+```
+
+If your program needs interaction over the terminal, use the command line flags `-t` and `-i`
+
+```
+[me@linux ~]$ podman run --rm -ti docker.io/library/ubuntu:18.04 /bin/bash -c 'echo -n "Type something: "; read aa; echo "You typed: $aa"'
+Type something: abc
+You typed: abc
+[me@linux ~]$ 
+```
+
+:warning: Using the `-t` flag may slightly modify the output, by adding extra _carriage return_ characters.
+This might be very surprising. The extra _carrage return_ (`\r`) is not added by podman, but by
+the terminal. 
+
+```
+[me@linux ~]$ echo abc | od -c
+0000000   a   b   c  \n
+0000004
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 echo abc | od -c
+0000000   a   b   c  \n
+0000004
+[me@linux ~]$ podman run --rm -ti docker.io/library/ubuntu:18.04 echo abc | od -c
+0000000   a   b   c  \r  \n
+0000005
+[me@linux ~]$ 
+```
 
 ## The professional way, using Dockerfile and GitHub/GitLab
 ### Using Github
