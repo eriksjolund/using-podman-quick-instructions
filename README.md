@@ -105,7 +105,7 @@ __docker.io/library/alpine:latest__ is about 6 MB.
 If we run the command  `cat /etc/os-release` inside the container
 
 ```
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 cat /etc/os-release
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 cat /etc/os-release
 NAME="Ubuntu"
 VERSION="18.04.4 LTS (Bionic Beaver)"
 ID=ubuntu
@@ -162,7 +162,7 @@ The home directory
 on the host system is not available from inside the container
 
 ```
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 ls -d /home/me
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 ls -d /home/me
 ls: cannot access '/home/me': No such file or directory
 [me@linux ~]$ 
 ```
@@ -181,9 +181,9 @@ option `-v /home/me/project1:/some/path:Z`.
 file1.txt
 [me@linux ~]$ cat /home/me/project1
 abc
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 -v /home/me/project1:/some/path:Z cat /some/path/file1.txt
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 -v /home/me/project1:/some/path:Z cat /some/path/file1.txt
 abc
-[me@linux ~]$ podman run -ti --rm docker.io/library/ubuntu:18.04 -v /home/me/project1:/some/path:Z rm /some/path/file1.txt
+[me@linux ~]$ podman run --rm docker.io/library/ubuntu:18.04 -v /home/me/project1:/some/path:Z rm /some/path/file1.txt
 [me@linux ~]$ ls /home/me/project1
 [me@linux ~]$ 
 ```
@@ -221,8 +221,6 @@ by using `gm convert -resize 50%` (from the software package [__GraphicsMagick__
 ## Is the software package already installed?
 
 Is GraphicsMagick already installed?
-
-(`-ti` is not needed when `podman run` is used in a pipe)
 
 #### Example Ubuntu LTS : Is GraphicsMagick already installed?
 
@@ -529,7 +527,7 @@ to resize the photo _/home/me/img/photo.jpg_
 ```
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
-[me@linux ~]$ podman run -ti --rm -v /home/me/img:/home/me/img:Z localhost/foobar:fedora31 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
+[me@linux ~]$ podman run --rm -v /home/me/img:/home/me/img:Z localhost/foobar:fedora31 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
 photo_resized.jpg
@@ -559,7 +557,7 @@ to resize the photo _/home/me/img/photo.jpg_
 ```
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
-[me@linux ~]$ podman run -ti --rm -v /home/me/img:/home/me/img:Z localhost/foobar:centos8 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
+[me@linux ~]$ podman run --rm -v /home/me/img:/home/me/img:Z localhost/foobar:centos8 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
 photo_resized.jpg
@@ -592,7 +590,7 @@ to resize the photo _/home/me/img/photo.jpg_
 ```
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
-[me@linux ~]$ podman run -ti --rm -v /home/me/img:/home/me/img:Z localhost/foobar:ubuntu1804 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
+[me@linux ~]$ podman run --rm -v /home/me/img:/home/me/img:Z localhost/foobar:ubuntu1804 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
 photo_resized.jpg
@@ -622,7 +620,7 @@ to resize the photo _/home/me/img/photo.jpg_
 ```
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
-[me@linux ~]$ podman run -ti --rm -v /home/me/img:/home/me/img:Z localhost/foobar:alpine3 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
+[me@linux ~]$ podman run --rm -v /home/me/img:/home/me/img:Z localhost/foobar:alpine3 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
 photo_resized.jpg
@@ -680,7 +678,7 @@ To resize the photo _/home/me/img/photo.jpg_
 ```
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
-[me@linux ~]$ podman run -ti --rm -v /home/me/img:/home/me/img:Z docker.io/jameskyburz/graphicsmagick-alpine:v3.0.0 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
+[me@linux ~]$ podman run --rm -v /home/me/img:/home/me/img:Z docker.io/jameskyburz/graphicsmagick-alpine:v3.0.0 gm convert -resize 50% /home/me/img/photo.jpg /home/me/img/resized_photo.jpg
 [me@linux ~]$ ls /home/me/img/
 photo.jpg
 photo_resized.jpg
@@ -696,7 +694,7 @@ an arbitrary user at _docker.io/username/containername:tag_.
 Luckily using `podman run` for executables of unknown origin in containers is safer
 
 ```
-[me@linux ~]$ podman run -ti --rm example.com/hacker/malicious:v1 malicious_executable
+[me@linux ~]$ podman run --rm example.com/hacker/malicious:v1 malicious_executable
 ```
 
 than executing an untrusted executable directly
